@@ -1,15 +1,9 @@
-//import { Feedback } from '../Feedback/Feedback';
 import { Container } from './App.styled';
 import { Component } from 'react';
-//export const App = () => {
-//  return (
-//    <Container>
-//      <Feedback defaultValiue={0}></Feedback>
-//    </Container>
-//  );
-//};
 
-//import { Feedback } from '../Feedback/Feedback';
+import { Statistics } from '../Statistics/Statistics ';
+import { FeedbackOptions } from '../FeedbackOptions/FeedbackOptions';
+import { Section } from '../Section/Section';
 
 class App extends Component {
   state = {
@@ -24,11 +18,10 @@ class App extends Component {
   };
 
   countPositiveFeedbackPercentage = () => {
-    this.setState(previusValue => {
-      return {
-        positiv: previusValue.good,
-      };
-    });
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad
+      ? (good / (good + neutral + bad)).toFixed(2)
+      : '0';
   };
 
   ClickOnBtn = evt => {
@@ -36,35 +29,33 @@ class App extends Component {
     this.setState(previusValue => {
       return {
         [btn]: previusValue[btn] + 1,
-        total: this.countTotalFeedback() + 1,
       };
     });
-    this.countPositiveFeedbackPercentage();
   };
 
   render() {
-    const { good, neutral, bad, total, positiv } = this.state;
-    console.log(this.state);
-    console.log('total:', total);
-    console.log('positiv:', positiv);
+    const { good, neutral, bad } = this.state;
+    const total = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
+
     return (
       <Container>
-        {/*<Feedback options={this.state} onLeaveFeedback={this.state}></Feedback>*/}
-        <div>
-          <p>Please leave feedback</p>
-          <button onClick={this.ClickOnBtn}>Good</button>
-          <button onClick={this.ClickOnBtn}>Neutral</button>
-          <button onClick={this.ClickOnBtn}>Bad</button>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            options={Object.keys(this.state)}
+            onLeaveFeedback={this.ClickOnBtn}
+          ></FeedbackOptions>
+        </Section>
 
-          <p>Statistics</p>
-          <p>Good: {good}</p>
-          <p>Neutral: {neutral}</p>
-          <p>Bad: {bad}</p>
-          <p>Total: {total ? total : '0'}</p>
-          <p>
-            Positive feedback: {positiv ? (positiv / total).toFixed(2) : '0'}
-          </p>
-        </div>
+        <Section title="Statistics">
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={total}
+            positivePercentage={positivePercentage}
+          ></Statistics>
+        </Section>
       </Container>
     );
   }
