@@ -4,31 +4,30 @@ import { Component } from 'react';
 import { Statistics } from '../Statistics/Statistics ';
 import { FeedbackOptions } from '../FeedbackOptions/FeedbackOptions';
 import { Section } from '../Section/Section';
+import { Notification } from '../Notification/Notification';
 
 class App extends Component {
   state = {
-    good: this.props.defaultValiue,
-    neutral: this.props.defaultValiue,
-    bad: this.props.defaultValiue,
+    good: 0,
+    neutral: 0,
+    bad: 0,
   };
 
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
-    return good + neutral + bad ? good + neutral + bad : 0;
+    return good + neutral + bad;
   };
 
   countPositiveFeedbackPercentage = () => {
-    const { good, neutral, bad } = this.state;
-    return good + neutral + bad
-      ? (good / (good + neutral + bad)).toFixed(2)
-      : '0';
+    const { good } = this.state;
+    return Math.round((good / this.countTotalFeedback()) * 100);
   };
 
-  ClickOnBtn = evt => {
-    const btn = evt.target.innerText.toLowerCase();
+  ClickOnBtn = option => {
+    console.log(option);
     this.setState(previusValue => {
       return {
-        [btn]: previusValue[btn] + 1,
+        [option]: previusValue[option] + 1,
       };
     });
   };
@@ -46,16 +45,19 @@ class App extends Component {
             onLeaveFeedback={this.ClickOnBtn}
           ></FeedbackOptions>
         </Section>
-
-        <Section title="Statistics">
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={total}
-            positivePercentage={positivePercentage}
-          ></Statistics>
-        </Section>
+        {total > 0 ? (
+          <Section title="Statistics">
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage}
+            ></Statistics>
+          </Section>
+        ) : (
+          <Notification message="There is no feedback"></Notification>
+        )}
       </Container>
     );
   }

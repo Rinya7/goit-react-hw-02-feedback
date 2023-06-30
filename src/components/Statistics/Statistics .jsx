@@ -9,29 +9,21 @@ export const Statistics = ({
 }) => {
   return (
     <>
-      {total > 0 ? (
-        <>
-          <BlockFeedbackMarks>
-            <Child>Good: {good}</Child>
-            <Child>Neutral: {neutral}</Child>
-            <Child>Bad: {bad}</Child>
-          </BlockFeedbackMarks>
-          <Child>Total: {total ? total : '0'}</Child>
-          <Child>
-            Positive feedback: {positivePercentage ? positivePercentage : '0'}
-          </Child>
-        </>
-      ) : (
-        <Child>There is no feedback</Child>
-      )}
+      <BlockFeedbackMarks>
+        <Child>Good: {good}</Child>
+        <Child>Neutral: {neutral}</Child>
+        <Child>Bad: {bad}</Child>
+      </BlockFeedbackMarks>
+      <Child>Total: {total}</Child>
+      <Child>Positive feedback: {positivePercentage}%</Child>
     </>
   );
 };
 
 Statistics.propTypes = {
-  good: PropTypes.number,
-  neutral: PropTypes.number,
-  bad: PropTypes.number,
-  total: PropTypes.number,
-  positivePercentage: PropTypes.string,
+  good: PropTypes.number.isRequired,
+  neutral: PropTypes.number.isRequired,
+  bad: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  positivePercentage: PropTypes.number.isRequired,
 };
