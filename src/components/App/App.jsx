@@ -24,7 +24,6 @@ class App extends Component {
   };
 
   ClickOnBtn = option => {
-    console.log(option);
     this.setState(previusValue => {
       return {
         [option]: previusValue[option] + 1,
